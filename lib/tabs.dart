@@ -24,8 +24,10 @@ class _TabsControllerState extends State<TabsController>{
       child: Scaffold(
         appBar: AppBar(
           title: Text("Expenses $_selectedIndex"),
+          backgroundColor: Colors.black,
           ),
       body: const Text("Hey"),
+      backgroundColor: Colors.black,
       bottomNavigationBar: BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -47,6 +49,7 @@ class _TabsControllerState extends State<TabsController>{
       ],
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
+      type: BottomNavigationBarType.fixed,
     ),
     )
     );
