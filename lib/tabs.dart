@@ -1,3 +1,7 @@
+import 'package:expense_app/pages/addExpense.dart';
+import 'package:expense_app/pages/expenses.dart';
+import 'package:expense_app/pages/reports.dart';
+import 'package:expense_app/pages/settings.dart';
 import 'package:flutter/material.dart';
 
 class TabsController extends StatefulWidget{
@@ -11,6 +15,13 @@ class _TabsControllerState extends State<TabsController>{
 
   var _selectedIndex = 0;
 
+  static const List<Widget> _pages = [
+    Expenses(),
+    Reports(),
+    AddExpense(),
+    Settings(),
+  ];
+
   void _onItemTapped(int index){
     setState(() {
       _selectedIndex = index;
@@ -23,10 +34,10 @@ class _TabsControllerState extends State<TabsController>{
       length: 4, 
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Expenses $_selectedIndex"),
+          title: const Text("Expense Tracker"),
           backgroundColor: Colors.black,
           ),
-      body: const Text("Hey"),
+      body: _pages[_selectedIndex],
       backgroundColor: Colors.black,
       bottomNavigationBar: BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
