@@ -14,9 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Expense Tracker',
       theme: ThemeData(
-        primarySwatch: Colors.brown,
-        brightness: Brightness.dark,
-        
+        colorScheme: const ColorScheme.dark(
+          brightness: Brightness.dark,
+          primary: Colors.black,
+          secondary: Colors.blue,
+        ),
       ),
       home: const MyHomePage(title: 'Expense Tracker'),
     );
