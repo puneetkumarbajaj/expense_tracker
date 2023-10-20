@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_slidable: ^1.2.0
   fl_chart: ^0.64.0
+  fl_chart_app: ^0.20.0
 
 dev_dependencies:
   flutter_test:
