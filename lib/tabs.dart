@@ -42,6 +42,7 @@ class _TabsControllerState extends State<TabsController>{
       body: _pages[_selectedIndex],
       backgroundColor: Colors.black,
       bottomNavigationBar: BottomNavigationBar(
+      backgroundColor: Colors.black,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.paid),
