@@ -16,7 +16,7 @@ class _TabsControllerState extends State<TabsController>{
 
   var _selectedIndex = 0;
 
-  static const List<WidgetWithTitle> _pages = [
+  static List _pages = [
     Expenses(),
     Reports(),
     AddExpense(),

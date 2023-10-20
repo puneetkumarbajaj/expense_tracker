@@ -4,13 +4,21 @@ import 'package:hive/hive.dart';
 class ExpenseTrackerDataBase{
 
   List categories = [];
+  List Expenses =[];
 
   final dataBox = Hive.box("expenseTrackerBox");
 
   void createInitialData() {
     categories = [
-      ["Bills", Color.fromARGB(255,0,0,255)],
-      ["Take Out", Color.fromARGB(255,0,255,0)],
+      ["Bills", Color.fromARGB(255,255,191,0)],
+      ["Take Out", Color.fromARGB(255,0,0,255)],
+      ["Rent", Color.fromARGB(255,0,255,0)],
+      ["Groceries", Color.fromARGB(255, 255, 155, 15)]
+    ];
+    Expenses = [
+      [12.5, "weekly", "2023-10-20","Note", categories[1]],
+      [13.0, "none", "2023-10-19", "Note", categories[0]],
+
     ];
     }
     void loadData() {
