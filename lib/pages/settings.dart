@@ -11,6 +11,9 @@ class Settings extends WidgetWithTitle {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(20),
+      width: double.infinity,
+      height: 150,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 28, 28, 30),
@@ -22,19 +25,15 @@ class Settings extends WidgetWithTitle {
               title: Text("Categories"),
               trailing: Icon(Icons.keyboard_arrow_right_sharp),
               onTap: () {
-                Scaffold(
-                  appBar: AppBar(
-                  leading: BackButton(),
-                  title: Text("Categories"),
-                  backgroundColor: Colors.black,
-                  centerTitle: true,
-                ),
-                backgroundColor: Colors.black,
-              );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Categories(),
+                    ));
               },
             ),
             ListTile(
-                title: Text(
+                title: const Text(
                   "Erase All Data",
                   style: TextStyle(color: Colors.red),
                 ),
@@ -65,9 +64,6 @@ class Settings extends WidgetWithTitle {
           ],
         ),
       ),
-      padding: const EdgeInsets.all(20),
-      width: double.infinity,
-      height: 150,
     );
   }
 }
