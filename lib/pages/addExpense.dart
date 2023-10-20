@@ -1,6 +1,4 @@
 import 'package:expense_app/data/database.dart';
-import 'package:expense_app/pages/categories.dart';
-import 'package:expense_app/types/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';

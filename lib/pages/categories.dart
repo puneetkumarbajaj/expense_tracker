@@ -1,6 +1,4 @@
 import 'package:expense_app/data/database.dart';
-import 'package:expense_app/tabs.dart';
-import 'package:expense_app/types/widgets.dart';
 import 'package:expense_app/utilities/category_tile.dart';
 import 'package:expense_app/utilities/catergory_dialog_box.dart';
 import 'package:flutter/material.dart';
