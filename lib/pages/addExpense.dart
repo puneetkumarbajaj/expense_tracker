@@ -15,7 +15,13 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
-  final List<String> recurrence = ['None', 'daily', 'weekly', 'monthly', 'yearly'];
+  final List<String> recurrence = [
+    'None',
+    'daily',
+    'weekly',
+    'monthly',
+    'yearly'
+  ];
   String _currentRecurrence = "None";
   ValueChanged<String?>? onCategorySelected;
   DateTime? _selectedDate;
@@ -38,39 +44,48 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> _recurrenceOptions = ["None", "Daily", "Monthly", "Weekly", "Yearly"];
+    List<String> _recurrenceOptions = [
+      "None",
+      "Daily",
+      "Monthly",
+      "Weekly",
+      "Yearly"
+    ];
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      width: double.infinity,
-      height: 320,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 28, 28, 30),
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: const Text("Amount"),
-              trailing: Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                width: 100, // adjust the width as needed
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly], // allows only digits
-                  decoration: InputDecoration(
-                    hintText: "0.00", 
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 0.5),
-                      borderRadius: BorderRadius.circular(8.0),
+    return Center(
+        child: Column(children: [
+      Container(
+        padding: const EdgeInsets.all(20),
+        width: double.infinity,
+        height: 320,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 28, 28, 30),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                title: const Text("Amount"),
+                trailing: Container(
+                  margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                  width: 100, // adjust the width as needed
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ], // allows only digits
+                    decoration: InputDecoration(
+                      hintText: "0.00",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(width: 0.5),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-
-            ListTile(
+              ListTile(
                 title: Text("Recurrence"),
                 trailing: DropdownButton<String>(
                   value: _currentRecurrence,
@@ -81,36 +96,40 @@ class _AddExpenseState extends State<AddExpense> {
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
-                    if(newValue != null)
-                    {setState(() {
-                      _currentRecurrence = newValue;
-                    });}
+                    if (newValue != null) {
+                      setState(() {
+                        _currentRecurrence = newValue;
+                      });
+                    }
                   },
                 ),
               ),
-
-            ListTile(
+              ListTile(
                 title: Text("Date"),
                 trailing: TextButton(
                   onPressed: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2022),  // Modify as per your requirement
-                      lastDate: DateTime(2024),   // Modify as per your requirement
+                      firstDate:
+                          DateTime(2022), // Modify as per your requirement
+                      lastDate:
+                          DateTime(2024), // Modify as per your requirement
                     );
                     if (pickedDate != null && pickedDate != _selectedDate)
                       setState(() {
                         _selectedDate = pickedDate;
                       });
                   },
-                  child: Text(_selectedDate != null
-                      ? "${_selectedDate?.toLocal()}".split(' ')[0]
-                      : "Choose Date", style: (TextStyle(color: Colors.white)),),
+                  child: Text(
+                    _selectedDate != null
+                        ? "${_selectedDate?.toLocal()}".split(' ')[0]
+                        : "Choose Date",
+                    style: (TextStyle(color: Colors.white)),
+                  ),
                 ),
               ),
-
-            ListTile(
+              ListTile(
                 title: Text("Note"),
                 trailing: Container(
                   margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -131,30 +150,36 @@ class _AddExpenseState extends State<AddExpense> {
                   ),
                 ),
               ),
-            ListTile(
-              title: Text('Category'),
-              trailing: DropdownButton<String>(
-                value: _selectedCategory,
-                items: db.categories.map((category) {
-                  String value = category[0];
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    setState(() {
-                      _selectedCategory = newValue;
-                    });
-                  }
-                },
-              ),
-            )
-          ],
+              ListTile(
+                title: Text('Category'),
+                trailing: DropdownButton<String>(
+                  value: _selectedCategory,
+                  items: db.categories.map((category) {
+                    String value = category[0];
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        _selectedCategory = newValue;
+                      });
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
-    );
+      ElevatedButton(onPressed: (){},
+       child: Text("Save Expense", style: TextStyle(color: Colors.white),),
+       style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        minimumSize: Size(200, 50),
+       ))
+    ]));
   }
 }
-

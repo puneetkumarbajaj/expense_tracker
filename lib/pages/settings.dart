@@ -42,7 +42,7 @@ class Settings extends WidgetWithTitle {
                   AlertDialog alert = AlertDialog(
                     actions: <Widget>[
                       TextButton(
-                        onPressed: handleEraseData,
+                        onPressed: () {Navigator.of(context).pop();},
                         child: const Text('Cancel' , style: TextStyle(color: Colors.blue),),
                       ),
                       TextButton(
