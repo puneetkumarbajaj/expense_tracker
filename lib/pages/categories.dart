@@ -43,11 +43,13 @@ class _CategoriesState extends State<Categories> {
       int red = selectedColor.red;
       int green = selectedColor.green;
       int blue = selectedColor.blue;
-      db.categories.add([_controller.text, Color.fromARGB(alpha, red, green, blue)]);
+      db.categories
+          .add([_controller.text, Color.fromARGB(alpha, red, green, blue)]);
       _controller.clear();
     });
     Navigator.of(context).pop();
     await db.updateData();
+    debugPrint(db.categories.toString());
   }
 
   //creates a new task

@@ -230,19 +230,18 @@ class _ReportsState extends State<Reports> {
               height: 28,
             ),
             Container(
-              height: 42,
-              child:
-              ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: db.categories.length,
-                itemBuilder: (context, index) {
-                  return CategoryHorizontal(
-                    categoryName: db.categories[index][0],
-                    categoryColor: db.categories[index][1],
-                  );
-                },
-              )),
+                height: 42,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: db.categories.length,
+                  itemBuilder: (context, index) {
+                    return CategoryHorizontal(
+                      categoryName: db.categories[index][0],
+                      categoryColor: db.categories[index][1],
+                    );
+                  },
+                )),
             const SizedBox(
               height: 18,
             ),
@@ -283,24 +282,29 @@ class _ReportsState extends State<Reports> {
   }
 
   List<PieChartSectionData> showingSections() {
-  return List.generate(
-    db.categories.length,
-    (i) {
-      final isTouched = i == touchedIndex;
-      final color = db.categories[i][1]; // Get color from the categories list
+    return List.generate(
+      db.categories.length,
+      (i) {
+        final isTouched = i == touchedIndex;
+        final color = db.categories[i][1]; // Get color from the categories list
 
-      return PieChartSectionData(
-        color: color,
-        value: 25,
-        title: '',
-        radius: i == 0 ? 80 : (i == 1 ? 65 : (i == 2 ? 60 : 70)), // This is just an example, adjust the radii as required
-        titlePositionPercentageOffset: 0.55,
-        borderSide: isTouched
-            ? const BorderSide(color: Colors.white, width: 6)
-            : BorderSide(color: Colors.white.withOpacity(0)),
-      );
-    },
-  );
-}
-
+        return PieChartSectionData(
+          color: color,
+          value: 25,
+          title: '',
+          radius: i == 0
+              ? 80
+              : (i == 1
+                  ? 65
+                  : (i == 2
+                      ? 60
+                      : 70)), // This is just an example, adjust the radii as required
+          titlePositionPercentageOffset: 0.55,
+          borderSide: isTouched
+              ? const BorderSide(color: Colors.white, width: 6)
+              : BorderSide(color: Colors.white.withOpacity(0)),
+        );
+      },
+    );
+  }
 }
