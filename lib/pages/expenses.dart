@@ -24,24 +24,39 @@ class _ExpensesState extends State<Expenses> {
       db.createInitialData();
     } else {
       //there is some data
-      db.loadData();
+      db.loadExpenseData();
     }
     super.initState();
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
-      itemCount: db.Expenses.length,
-      itemBuilder: (context, index) {
-        return ExpenseDisplay(
-          amount: db.Expenses[index][0],
-          occurence: db.Expenses[index][1],
-          date: db.Expenses[index][2],
-          note: db.Expenses[index][3],
-          category: db.Expenses[index][4],
-        );
-      },
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: db.Expenses.length,
+            itemBuilder: (context, index) {
+              return ExpenseDisplay(
+                amount: db.Expenses[index][0],
+                occurence: db.Expenses[index][1],
+                date: db.Expenses[index][2],
+                note: db.Expenses[index][3],
+                category: db.Expenses[index][4],
+              );
+            },
+          ),
+        ),
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                debugPrint("Refresh");
+                db.loadData();
+              });
+            },
+            child: Text("Refresh"))
+      ],
     ));
   }
 }

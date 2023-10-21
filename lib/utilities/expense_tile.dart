@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ExpenseDisplay extends StatelessWidget {
-  final double amount;
+  final int amount;
   final String occurence;
-  final String date;
+  final DateTime date;
   final String note;
-  final List<Object> category;
+  final String category;
 
   ExpenseDisplay(
       {super.key,
@@ -15,8 +15,8 @@ class ExpenseDisplay extends StatelessWidget {
       required this.note,
       required this.category});
 
-  late final Color categoryColors = category[1] as Color;
-  late final String categoryText = category[0].toString();
+  late final String categoryColors = category;
+  late final String categoryText = category.toString();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ExpenseDisplay extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(date),
+            Text(date.toString().split(' ')[0]),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -34,7 +34,7 @@ class ExpenseDisplay extends StatelessWidget {
                   height: 15,
                   margin: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
-                    color: categoryColors,
+                    // color: categoryColors,
                     shape: BoxShape.circle,
                   ),
                 ),
