@@ -6,10 +6,10 @@ import 'package:hive/hive.dart';
 class AddExpense extends StatefulWidget {
   final String title;
 
-  AddExpense({Key? key, this.title = "Add Expense"}) : super(key: key);
+  const AddExpense({Key? key, this.title = "Add Expense"}) : super(key: key);
 
   @override
-  _AddExpenseState createState() => _AddExpenseState();
+  State<AddExpense> createState() => _AddExpenseState();
 }
 
 class _AddExpenseState extends State<AddExpense> {
@@ -29,6 +29,7 @@ class _AddExpenseState extends State<AddExpense> {
   final _myBox = Hive.box('expenseTrackerBox');
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
+  late Color categoryColor;
 
   ExpenseTrackerDataBase db = ExpenseTrackerDataBase();
 
@@ -46,7 +47,7 @@ class _AddExpenseState extends State<AddExpense> {
 
   void saveExpense() async {
     setState(() {
-      db.Expenses.add([
+      db.expenses.add([
         _amount,
         _currentRecurrence,
         _selectedDate,
@@ -58,7 +59,7 @@ class _AddExpenseState extends State<AddExpense> {
       debugPrint("$_amount $_currentRecurrence");
     });
     await db.updateExpenseData();
-    debugPrint(db.Expenses.toString());
+    debugPrint(db.expenses.toString());
   }
 
   @override
@@ -186,6 +187,7 @@ class _AddExpenseState extends State<AddExpense> {
                       items: db.categories.map((category) {
                         String value = category[0];
                         Color color = category[1];
+                        categoryColor = color;
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Row(
@@ -193,7 +195,7 @@ class _AddExpenseState extends State<AddExpense> {
                               Container(
                                 width: 15,
                                 height: 15,
-                                margin: EdgeInsets.all(5.0),
+                                margin: const EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
                                     color: color, shape: BoxShape.circle),
                               ),
@@ -202,10 +204,11 @@ class _AddExpenseState extends State<AddExpense> {
                           ),
                         );
                       }).toList(),
-                      onChanged: (String? newValue) {
+                      onChanged: (newValue) {
                         if (newValue != null) {
                           setState(() {
                             _selectedCategory = newValue;
+                            debugPrint(newValue);
                           });
                         }
                       },

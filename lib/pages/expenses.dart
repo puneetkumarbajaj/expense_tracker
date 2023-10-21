@@ -1,7 +1,6 @@
 import 'package:expense_app/data/database.dart';
 import 'package:expense_app/utilities/expense_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 class Expenses extends StatefulWidget {
@@ -16,6 +15,7 @@ class Expenses extends StatefulWidget {
 class _ExpensesState extends State<Expenses> {
   final _myBox = Hive.box('expenseTrackerBox');
   ExpenseTrackerDataBase db = ExpenseTrackerDataBase();
+  late double total;
 
   @override
   void initState() {
@@ -27,36 +27,62 @@ class _ExpensesState extends State<Expenses> {
       db.loadExpenseData();
     }
     super.initState();
+    // debugPrint(db.expenses[1][0].toString());
+    double sum = 0;
+    for (int i = 0; i < db.expenses.length; i++) {
+      sum = sum + db.expenses[i][0];
+    }
+    total = sum;
+    debugPrint(sum.toString());
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: db.Expenses.length,
-            itemBuilder: (context, index) {
-              return ExpenseDisplay(
-                amount: db.Expenses[index][0],
-                occurence: db.Expenses[index][1],
-                date: db.Expenses[index][2],
-                note: db.Expenses[index][3],
-                category: db.Expenses[index][4],
-              );
-            },
+      backgroundColor: Colors.black,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 60,
+            decoration:
+                BoxDecoration(border: Border.all(color: Color(0xff443a49))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.attach_money_rounded,
+                  size: 27,
+                  color: Color.fromARGB(255, 146, 143, 143),
+                ),
+                Text(
+                  total.toString().split('.')[0],
+                  style: const TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                debugPrint("Refresh");
-                db.loadData();
-              });
-            },
-            child: Text("Refresh"))
-      ],
-    ));
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: db.expenses.length,
+              itemBuilder: (context, index) {
+                return ExpenseDisplay(
+                  amount: db.expenses[index][0],
+                  occurence: db.expenses[index][1],
+                  date: db.expenses[index][2],
+                  note: db.expenses[index][3],
+                  category: db.expenses[index][4],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
