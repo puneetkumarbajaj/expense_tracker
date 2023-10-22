@@ -26,11 +26,12 @@ class _ReportsState extends State<Reports> {
   @override
   void initState() {
     //if this is the first time ever opening the app, then have some default data
-    if (_myBox.get("CATEGORIES") == null) {
+    if (_myBox.isEmpty) {
       db.createInitialData();
     } else {
       //there is some data
       db.loadData();
+      db.loadExpenseData();
     }
     super.initState();
   }
@@ -289,15 +290,33 @@ class _ReportsState extends State<Reports> {
   }
 
   List<PieChartSectionData> showingSections() {
+    Map<String, double> categorySums = {};
+    double totalSum = _myBox.get('sum', defaultValue: 0.0); // Get this value from your database
+    debugPrint(db.expenses.length.toString());
+    for (var expense in db.expenses) {
+      double value = double.parse(expense[0].toString());
+      String category = expense[4];
+
+      if (categorySums.containsKey(category)) {
+        categorySums[category] = categorySums[category]! + value;
+      } else {
+        categorySums[category] = value;
+      }
+      debugPrint('Category: $category, Running Sum: ${categorySums[category]}');
+    }
+
+
     return List.generate(
       db.categories.length,
       (i) {
         final isTouched = i == touchedIndex;
-        final Category category = db.categories[i];  // Get the category object
+        final Category category = db.categories[i]; // Get the category object
+        final double percentage = (categorySums[category.name] ?? 0) / totalSum * 100;
+        debugPrint('Expenses in db: ${db.expenses}');
 
         return PieChartSectionData(
-          color: category.color,  // Access color property directly
-          value: 25,  // You might want to calculate this value based on some property of your category
+          color: category.color, // Access color property directly
+          value: percentage.isNaN ? 0 : percentage, // Set to 0 if percentage is NaN
           title: '',
           radius: i == 0 ? 80 : (i == 1 ? 65 : (i == 2 ? 60 : 70)),
           titlePositionPercentageOffset: 0.55,

@@ -41,7 +41,7 @@ class _AddExpenseState extends State<AddExpense>
   @override
   void initState() {
     //if this is the first time ever opening the app, then have some default data
-    if (_myBox.get("CATEGORIES") == null) {
+    if (_myBox.isEmpty) {
       db.createInitialData();
     } else {
       //there is some data
@@ -56,8 +56,6 @@ class _AddExpenseState extends State<AddExpense>
       _amountController.clear();
       _noteController.clear();
     });
-    String _category = _selectedCategory!.name;
-    Color _color = _selectedCategory!.color;
     db.expenses.add([
       _amount,
       _currentRecurrence,
@@ -67,6 +65,9 @@ class _AddExpenseState extends State<AddExpense>
       _selectedCategory!.color,
     ]);
     await db.updateExpenseData();
+    _enteredNote = "";
+    _amount = 0;
+    debugPrint(db.expenses.toString());
   }
 
   @override
@@ -106,7 +107,6 @@ class _AddExpenseState extends State<AddExpense>
                             if (value != '') {
                               _amount = int.parse(value);
                             }
-                            debugPrint(_amount.toString());
                           });
                         },
                         keyboardType: TextInputType.number,

@@ -20,7 +20,7 @@ class _ExpensesState extends State<Expenses> {
   @override
   void initState() {
     //if this is the first time ever opening the app, then have some default data
-    if (_myBox.get("EXPENSES") == null) {
+    if (_myBox.isEmpty) {
       db.createInitialData();
     } else {
       //there is some data
@@ -33,7 +33,7 @@ class _ExpensesState extends State<Expenses> {
       sum = sum + db.expenses[i][0];
     }
     total = sum;
-    debugPrint(sum.toString());
+    db.updateSumValue('sum', sum);
   }
 
   Widget build(BuildContext context) {

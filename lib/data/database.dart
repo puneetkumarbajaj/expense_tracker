@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 class ExpenseTrackerDataBase {
   List<Category> categories = [];
   List<dynamic> expenses = [];
+  double sum = 0;
 
   final dataBox = Hive.box("expenseTrackerBox");
 
@@ -31,7 +32,7 @@ class ExpenseTrackerDataBase {
   }
 
   void loadExpenseData() {
-    //expenses = dataBox.get("EXPENSES");
+    expenses = dataBox.get("EXPENSES");
   }
 
   void addExpense(List<dynamic> newExpense) {
@@ -41,4 +42,9 @@ class ExpenseTrackerDataBase {
   Future<void> updateExpenseData() async {
     dataBox.put("EXPENSES", expenses);
   }
+
+  Future<void> updateSumValue(String key, double newValue) async {
+    await dataBox.put(key, newValue);
+  }
+
 }
