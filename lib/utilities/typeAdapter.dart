@@ -16,3 +16,5 @@ class ColorAdapter extends TypeAdapter<Color> {
     writer.writeInt(obj.value);
   }
 }
+
+

@@ -1,4 +1,5 @@
 import 'package:expense_app/data/database.dart';
+import 'package:expense_app/utilities/category_class_utility.dart';
 import 'package:expense_app/utilities/category_tile.dart';
 import 'package:expense_app/utilities/catergory_dialog_box.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     //if this is the first time ever opening the app, then have some default data
-    if (_myBox.get("CATEGORIES") == null) {
+    if (_myBox.isEmpty) {
       db.createInitialData();
     } else {
       //there is some data
@@ -44,7 +45,7 @@ class _CategoriesState extends State<Categories> {
       int green = selectedColor.green;
       int blue = selectedColor.blue;
       db.categories
-          .add([_controller.text, Color.fromARGB(alpha, red, green, blue)]);
+          .add(Category(name: _controller.text, color: Color.fromARGB(alpha, red, green, blue)));
       _controller.clear();
     });
     Navigator.of(context).pop();
@@ -86,12 +87,12 @@ class _CategoriesState extends State<Categories> {
         itemCount: db.categories.length,
         itemBuilder: (context, index) {
           return CategoryTile(
-            categoryName: db.categories[index][0],
-            categoryColor: db.categories[index][1],
+            categoryName: db.categories[index].name,
+            categoryColor: db.categories[index].color,
             deleteFunction: (context) => deleteCategory(index),
           );
         },
-      ),
+      )
     );
   }
 }

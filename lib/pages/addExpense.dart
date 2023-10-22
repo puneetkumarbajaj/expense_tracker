@@ -1,4 +1,5 @@
 import 'package:expense_app/data/database.dart';
+import 'package:expense_app/utilities/category_class_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -26,7 +27,7 @@ class _AddExpenseState extends State<AddExpense>
   DateTime? _selectedDate;
   String _enteredNote = "";
   int? _amount;
-  String? _selectedCategory;
+  Category? _selectedCategory;
   final _myBox = Hive.box('expenseTrackerBox');
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
@@ -54,23 +55,18 @@ class _AddExpenseState extends State<AddExpense>
     setState(() {
       _amountController.clear();
       _noteController.clear();
-      debugPrint("$_amount $_currentRecurrence");
     });
-    String _category = _selectedCategory!.split(', ')[0].substring(1);
-    String _color =
-        _selectedCategory!.split(', ')[1].split('(')[1].split(')')[0];
-    int _colorInt = int.parse(_color);
+    String _category = _selectedCategory!.name;
+    Color _color = _selectedCategory!.color;
     db.expenses.add([
       _amount,
       _currentRecurrence,
       _selectedDate,
       _enteredNote,
-      _category,
-      _colorInt,
+      _selectedCategory!.name,
+      _selectedCategory!.color,
     ]);
     await db.updateExpenseData();
-    debugPrint("$_category   ${_colorInt.toString()}  $_color");
-    debugPrint(db.expenses.toString());
   }
 
   @override
@@ -197,13 +193,10 @@ class _AddExpenseState extends State<AddExpense>
                   ListTile(
                     title: const Text('Category'),
                     trailing: DropdownButton<String>(
-                      value: _selectedCategory,
-                      items: db.categories.map((category) {
-                        String value = category.toString();
-                        Color color = category[1];
-                        categoryColor = color;
+                      value: _selectedCategory?.name,
+                      items: db.categories.map((Category) {
                         return DropdownMenuItem<String>(
-                          value: value,
+                          value: Category.name,
                           child: Row(
                             children: <Widget>[
                               Container(
@@ -211,9 +204,11 @@ class _AddExpenseState extends State<AddExpense>
                                 height: 15,
                                 margin: const EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
-                                    color: color, shape: BoxShape.circle),
+                                  color: Category.color, 
+                                  shape: BoxShape.circle
+                                ),
                               ),
-                              Text(value.split(', ')[0].substring(1)),
+                              Text(Category.name),
                             ],
                           ),
                         );
@@ -221,8 +216,8 @@ class _AddExpenseState extends State<AddExpense>
                       onChanged: (newValue) {
                         if (newValue != null) {
                           setState(() {
-                            _selectedCategory = newValue;
-                            debugPrint(newValue);
+                            categoryColor = db.categories.firstWhere((Category) => Category.name == newValue).color;
+                            _selectedCategory = Category(name: newValue,color: categoryColor);
                           });
                         }
                       },

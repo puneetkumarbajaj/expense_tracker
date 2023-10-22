@@ -8,7 +8,7 @@ class ExpenseDisplay extends StatelessWidget {
   final DateTime date;
   final String note;
   final String category;
-  final int color;
+  final Color color;
 
   ExpenseDisplay(
       {super.key,
@@ -17,7 +17,8 @@ class ExpenseDisplay extends StatelessWidget {
       required this.date,
       required this.note,
       required this.category,
-      required this.color});
+      required this.color
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,7 @@ class ExpenseDisplay extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(9),
                 decoration: BoxDecoration(
-                    color: Color(color),
+                    color: color,
                     borderRadius:
                         const BorderRadius.all(Radius.elliptical(45, 50))),
                 padding:
