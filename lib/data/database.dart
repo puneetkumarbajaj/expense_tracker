@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class ExpenseTrackerDataBase {
   List categories = [];
-  List Expenses = [];
+  List<dynamic> expenses = [];
 
   final dataBox = Hive.box("expenseTrackerBox");
 
@@ -14,7 +14,7 @@ class ExpenseTrackerDataBase {
       ["Rent", Color.fromARGB(255, 0, 255, 0)],
       ["Groceries", Color.fromARGB(255, 255, 155, 15)]
     ];
-    Expenses = [
+    expenses = [
       [12.5, "weekly", "2023-10-20", "Note", categories[1]],
       [13.0, "none", "2023-10-19", "Note", categories[0]],
     ];
@@ -29,10 +29,14 @@ class ExpenseTrackerDataBase {
   }
 
   void loadExpenseData() {
-    Expenses = dataBox.get("EXPENSES");
+    expenses = dataBox.get("EXPENSES");
+  }
+
+  void addExpense(List<dynamic> newExpense) {
+    expenses.add(newExpense);
   }
 
   Future<void> updateExpenseData() async {
-    dataBox.put("EXPENSES", Expenses);
+    dataBox.put("EXPENSES", expenses);
   }
 }

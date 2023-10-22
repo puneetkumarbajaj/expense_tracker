@@ -6,13 +6,14 @@ import 'package:hive/hive.dart';
 class AddExpense extends StatefulWidget {
   final String title;
 
-  AddExpense({Key? key, this.title = "Add Expense"}) : super(key: key);
+  const AddExpense({Key? key, this.title = "Add Expense"}) : super(key: key);
 
   @override
-  _AddExpenseState createState() => _AddExpenseState();
+  State<AddExpense> createState() => _AddExpenseState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddExpenseState extends State<AddExpense>
+    with AutomaticKeepAliveClientMixin {
   final List<String> recurrence = [
     'None',
     'daily',
@@ -29,8 +30,12 @@ class _AddExpenseState extends State<AddExpense> {
   final _myBox = Hive.box('expenseTrackerBox');
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
+  late Color categoryColor;
 
   ExpenseTrackerDataBase db = ExpenseTrackerDataBase();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -40,29 +45,37 @@ class _AddExpenseState extends State<AddExpense> {
     } else {
       //there is some data
       db.loadData();
+      db.loadExpenseData();
     }
     super.initState();
   }
 
   void saveExpense() async {
     setState(() {
-      db.Expenses.add([
-        _amount,
-        _currentRecurrence,
-        _selectedDate,
-        _enteredNote,
-        _selectedCategory
-      ]);
       _amountController.clear();
       _noteController.clear();
       debugPrint("$_amount $_currentRecurrence");
     });
+    String _category = _selectedCategory!.split(', ')[0].substring(1);
+    String _color =
+        _selectedCategory!.split(', ')[1].split('(')[1].split(')')[0];
+    int _colorInt = int.parse(_color);
+    db.expenses.add([
+      _amount,
+      _currentRecurrence,
+      _selectedDate,
+      _enteredNote,
+      _category,
+      _colorInt,
+    ]);
     await db.updateExpenseData();
-    debugPrint(db.Expenses.toString());
+    debugPrint("$_category   ${_colorInt.toString()}  $_color");
+    debugPrint(db.expenses.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<String> recurrenceOptions = [
       "None",
       "Daily",
@@ -184,8 +197,9 @@ class _AddExpenseState extends State<AddExpense> {
                     trailing: DropdownButton<String>(
                       value: _selectedCategory,
                       items: db.categories.map((category) {
-                        String value = category[0];
+                        String value = category.toString();
                         Color color = category[1];
+                        categoryColor = color;
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Row(
@@ -193,19 +207,20 @@ class _AddExpenseState extends State<AddExpense> {
                               Container(
                                 width: 15,
                                 height: 15,
-                                margin: EdgeInsets.all(5.0),
+                                margin: const EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
                                     color: color, shape: BoxShape.circle),
                               ),
-                              Text(value),
+                              Text(value.split(', ')[0].substring(1)),
                             ],
                           ),
                         );
                       }).toList(),
-                      onChanged: (String? newValue) {
+                      onChanged: (newValue) {
                         if (newValue != null) {
                           setState(() {
                             _selectedCategory = newValue;
+                            debugPrint(newValue);
                           });
                         }
                       },

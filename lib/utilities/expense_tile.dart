@@ -1,3 +1,5 @@
+// import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 
 class ExpenseDisplay extends StatelessWidget {
@@ -6,6 +8,7 @@ class ExpenseDisplay extends StatelessWidget {
   final DateTime date;
   final String note;
   final String category;
+  final int color;
 
   ExpenseDisplay(
       {super.key,
@@ -13,37 +16,66 @@ class ExpenseDisplay extends StatelessWidget {
       required this.occurence,
       required this.date,
       required this.note,
-      required this.category});
-
-  late final String categoryColors = category;
-  late final String categoryText = category.toString();
+      required this.category,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(date.toString().split(' ')[0]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: 15,
-                  height: 15,
-                  margin: EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                    // color: categoryColors,
-                    shape: BoxShape.circle,
+    return Card(
+      shape: const BeveledRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      color: const Color.fromARGB(180, 30, 30, 30),
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(9),
+                child: Text(
+                  note,
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(categoryText),
-              ],
-            ),
-            Text(amount.toString()),
-          ],
-        ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(9),
+                child: Text(
+                  'USD ${amount.toString()}',
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                    color: Color(color),
+                    borderRadius:
+                        const BorderRadius.all(Radius.elliptical(45, 50))),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
+                child: Text(category),
+              ),
+              Container(
+                padding: const EdgeInsets.all(9),
+                child: Text(date.toString().split(' ')[0]),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
