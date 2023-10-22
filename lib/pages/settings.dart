@@ -41,7 +41,7 @@ class Settings extends WidgetWithTitle {
             ),
             ListTile(
                 title: const Text(
-                  "Erase All Data",
+                  "Reset to Factory",
                   style: TextStyle(color: Colors.red),
                 ),
                 trailing: Icon(Icons.keyboard_arrow_right_sharp),
@@ -53,11 +53,11 @@ class Settings extends WidgetWithTitle {
                         child: const Text('Cancel' , style: TextStyle(color: Colors.blue),),
                       ),
                       TextButton(
-                        onPressed: handleEraseData,
+                        onPressed: () {handleEraseData; Navigator.of(context).pop();},
                         child: const Text('Erase Data', style: TextStyle(color: Colors.red),),
                       )
                     ],
-                    title: Text("Are you sure"),
+                    title: Text("Are you sure? This will Erase all your personal data and reset the app back to fresh install state"),
                     backgroundColor: Color.fromARGB(255, 28, 28, 30),
                   );
                   showDialog(

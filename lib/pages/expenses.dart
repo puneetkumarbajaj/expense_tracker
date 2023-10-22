@@ -27,7 +27,6 @@ class _ExpensesState extends State<Expenses> {
       db.loadExpenseData();
     }
     super.initState();
-    // debugPrint(db.expenses[1][0].toString());
     double sum = 0;
     for (int i = 0; i < db.expenses.length; i++) {
       sum = sum + db.expenses[i][0];
@@ -44,8 +43,6 @@ class _ExpensesState extends State<Expenses> {
         children: [
           Container(
             height: 60,
-            decoration:
-                BoxDecoration(border: Border.all(color: Color(0xff443a49))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,7 +52,7 @@ class _ExpensesState extends State<Expenses> {
                   color: Color.fromARGB(255, 146, 143, 143),
                 ),
                 Text(
-                  total.toString().split('.')[0],
+                  total.toString(),
                   style: const TextStyle(
                     fontSize: 50,
                     fontWeight: FontWeight.w400,

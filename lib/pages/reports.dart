@@ -50,7 +50,7 @@ class _ReportsState extends State<Reports> {
             int rodIndex,
           ) {
             return BarTooltipItem(
-              rod.toY.round().toString(),
+              rod.toY.toString(),
               const TextStyle(
                 color: Colors.cyan,
                 fontWeight: FontWeight.bold,

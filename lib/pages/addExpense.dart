@@ -26,7 +26,7 @@ class _AddExpenseState extends State<AddExpense>
   ValueChanged<String?>? onCategorySelected;
   DateTime? _selectedDate;
   String _enteredNote = "";
-  int? _amount;
+  double? _amount;
   Category? _selectedCategory;
   final _myBox = Hive.box('expenseTrackerBox');
   final _amountController = TextEditingController();
@@ -105,14 +105,14 @@ class _AddExpenseState extends State<AddExpense>
                         onChanged: (value) {
                           setState(() {
                             if (value != '') {
-                              _amount = int.parse(value);
+                              _amount = double.tryParse(value);
                             }
                           });
                         },
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ], // allows only digits
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}$'))
+                        ],
                         decoration: InputDecoration(
                           hintText: "0.00",
                           border: OutlineInputBorder(

@@ -17,7 +17,7 @@ class ExpenseTrackerDataBase {
       Category(name: "Groceries", color: Color(0xFFFF9B0F))
     ];
     expenses = [
-      [12.5, "weekly", DateTime(2023, 10, 20), "Note", "Groceries", Color(0xFFFF9B0F)],
+      [11.0, "weekly", DateTime(2023, 10, 20), "Note", "Groceries", Color(0xFFFF9B0F)],
       [13.0, "none", DateTime(2023, 10, 19), "Note", "Groceries", Color(0xFFFF9B0F)],
     ];
     dataBox.put("CATEGORIES", categories);
