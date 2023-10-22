@@ -7,6 +7,7 @@ import 'package:expense_app/utilities/indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 class Reports extends StatefulWidget {
   final String title;
@@ -132,78 +133,43 @@ class _ReportsState extends State<Reports> {
         end: Alignment.topCenter,
       );
 
-  List<BarChartGroupData> get barGroups => [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-              toY: 8,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 2,
-          barRods: [
-            BarChartRodData(
-              toY: 14,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-              toY: 15,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 4,
-          barRods: [
-            BarChartRodData(
-              toY: 13,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 5,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 6,
-          barRods: [
-            BarChartRodData(
-              toY: 16,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-      ];
+List<BarChartGroupData> generateBarGroups() {
+  final now = DateTime.now();
+  final sevenDaysAgo = now.subtract(Duration(days: 7));
+
+  // 1. Parse and Filter the Expenses
+  final recentExpenses = db.expenses.where((expense) {
+    final date = expense[2];
+    return date.isAfter(sevenDaysAgo) && date.isBefore(now);
+  }).toList();
+
+  // 2. Aggregate Expenses by Day
+  final Map<int, double> dailySums = {};
+  for (var expense in recentExpenses) {
+    final date = expense[2];
+    final dayOfYear = int.parse(DateFormat('D').format(date));
+
+    dailySums[dayOfYear] = (dailySums[dayOfYear] ?? 0) + expense[0];
+  }
+
+  // 3. Update BarChartGroupData
+  return List.generate(7, (index) {
+    final dayOfYear = int.parse(DateFormat('D').format(now.subtract(Duration(days: index))));
+    final expense = dailySums[dayOfYear] ?? 0;
+
+    return BarChartGroupData(
+      x: index,
+      barRods: [
+        BarChartRodData(
+          toY: expense,
+          gradient: _barsGradient,
+        )
+      ],
+      showingTooltipIndicators: [0],
+    );
+  }).toList();
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -218,10 +184,10 @@ class _ReportsState extends State<Reports> {
                 barTouchData: barTouchData,
                 titlesData: titlesData,
                 borderData: borderData,
-                barGroups: barGroups,
+                barGroups: generateBarGroups(),
                 gridData: const FlGridData(show: false),
                 alignment: BarChartAlignment.spaceAround,
-                maxY: 20,
+                maxY: 100,
               ),
             ),
           ),
@@ -290,41 +256,56 @@ class _ReportsState extends State<Reports> {
   }
 
   List<PieChartSectionData> showingSections() {
-    Map<String, double> categorySums = {};
-    double totalSum = _myBox.get('sum', defaultValue: 0.0); // Get this value from your database
-    debugPrint(db.expenses.length.toString());
-    for (var expense in db.expenses) {
-      double value = double.parse(expense[0].toString());
-      String category = expense[4];
+  Map<String, double> categorySums = {};
+  final now = DateTime.now();
+  final thirtyDaysAgo = now.subtract(Duration(days: 30));
+  
+  // Filter expenses from the last 30 days
+  final recentExpenses = db.expenses.where((expense) {
+    final date = expense[2] as DateTime; 
+    return date.isAfter(thirtyDaysAgo) && date.isBefore(now);
+  }).toList();
 
-      if (categorySums.containsKey(category)) {
-        categorySums[category] = categorySums[category]! + value;
-      } else {
-        categorySums[category] = value;
-      }
-      debugPrint('Category: $category, Running Sum: ${categorySums[category]}');
-    }
-
-
-    return List.generate(
-      db.categories.length,
-      (i) {
-        final isTouched = i == touchedIndex;
-        final Category category = db.categories[i]; // Get the category object
-        final double percentage = (categorySums[category.name] ?? 0) / totalSum * 100;
-        debugPrint('Expenses in db: ${db.expenses}');
-
-        return PieChartSectionData(
-          color: category.color, // Access color property directly
-          value: percentage.isNaN ? 0 : percentage, // Set to 0 if percentage is NaN
-          title: '',
-          radius: i == 0 ? 80 : (i == 1 ? 65 : (i == 2 ? 60 : 70)),
-          titlePositionPercentageOffset: 0.55,
-          borderSide: isTouched
-              ? const BorderSide(color: Colors.white, width: 6)
-              : BorderSide(color: Colors.white.withOpacity(0)),
-        );
-      },
-    );
+  // Calculate total sum of recent expenses
+  double totalSum = recentExpenses.fold(0.0, (sum, expense) {
+  final value = expense[0];
+  if (value is int) {
+    return sum + value.toDouble();
+  } else if (value is double) {
+    return sum + value;
+  } else {
+    return sum = 0;
   }
+});
+
+  
+  for (var expense in recentExpenses) {
+  double value = (expense[0] is int) ? (expense[0] as int).toDouble() : (expense[0] as double);
+  String category = expense[4];
+
+  categorySums[category] = (categorySums[category] ?? 0.0) + value;
+}
+
+
+  return List.generate(
+    db.categories.length,
+    (i) {
+      final isTouched = i == touchedIndex;
+      final Category category = db.categories[i];
+      final double percentage = (categorySums[category.name] ?? 0) / totalSum * 100;
+
+      return PieChartSectionData(
+        color: category.color,
+        value: percentage.isNaN ? 0 : percentage,
+        title: '',
+        radius: i == 0 ? 80 : (i == 1 ? 65 : (i == 2 ? 60 : 70)),
+        titlePositionPercentageOffset: 0.55,
+        borderSide: isTouched
+            ? const BorderSide(color: Colors.white, width: 6)
+            : BorderSide(color: Colors.white.withOpacity(0)),
+      );
+    },
+  );
+}
+
 }
