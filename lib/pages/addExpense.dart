@@ -12,7 +12,8 @@ class AddExpense extends StatefulWidget {
   State<AddExpense> createState() => _AddExpenseState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddExpenseState extends State<AddExpense>
+    with AutomaticKeepAliveClientMixin {
   final List<String> recurrence = [
     'None',
     'daily',
@@ -34,6 +35,9 @@ class _AddExpenseState extends State<AddExpense> {
   ExpenseTrackerDataBase db = ExpenseTrackerDataBase();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     //if this is the first time ever opening the app, then have some default data
     if (_myBox.get("CATEGORIES") == null) {
@@ -41,23 +45,24 @@ class _AddExpenseState extends State<AddExpense> {
     } else {
       //there is some data
       db.loadData();
+      db.loadExpenseData();
     }
     super.initState();
   }
 
   void saveExpense() async {
     setState(() {
-      db.expenses.add([
-        _amount,
-        _currentRecurrence,
-        _selectedDate,
-        _enteredNote,
-        _selectedCategory
-      ]);
       _amountController.clear();
       _noteController.clear();
       debugPrint("$_amount $_currentRecurrence");
     });
+    db.expenses.add([
+      _amount,
+      _currentRecurrence,
+      _selectedDate,
+      _enteredNote,
+      _selectedCategory
+    ]);
     await db.updateExpenseData();
     debugPrint(db.expenses.toString());
   }
