@@ -107,7 +107,9 @@ class _AddExpenseState extends State<AddExpense>
                         controller: _amountController,
                         onChanged: (value) {
                           setState(() {
-                            _amount = int.parse(value);
+                            if (value != '') {
+                              _amount = int.parse(value);
+                            }
                             debugPrint(_amount.toString());
                           });
                         },
