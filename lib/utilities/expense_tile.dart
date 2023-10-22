@@ -8,18 +8,16 @@ class ExpenseDisplay extends StatelessWidget {
   final DateTime date;
   final String note;
   final String category;
+  final int color;
 
-  ExpenseDisplay({
-    super.key,
-    required this.amount,
-    required this.occurence,
-    required this.date,
-    required this.note,
-    required this.category,
-  });
-
-  // late final Color categoryColors = category[1] as Color;
-  // late final String categoryText = category[0].toString();
+  ExpenseDisplay(
+      {super.key,
+      required this.amount,
+      required this.occurence,
+      required this.date,
+      required this.note,
+      required this.category,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +60,11 @@ class ExpenseDisplay extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                margin: const EdgeInsets.all(9),
-                decoration: const BoxDecoration(
-                    // color: color,
-                    borderRadius: BorderRadius.all(Radius.elliptical(45, 50))),
+                margin: EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                    color: Color(color),
+                    borderRadius:
+                        const BorderRadius.all(Radius.elliptical(45, 50))),
                 padding:
                     const EdgeInsets.symmetric(vertical: 3, horizontal: 12),
                 child: Text(category),

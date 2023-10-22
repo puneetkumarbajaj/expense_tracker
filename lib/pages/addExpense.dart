@@ -56,19 +56,26 @@ class _AddExpenseState extends State<AddExpense>
       _noteController.clear();
       debugPrint("$_amount $_currentRecurrence");
     });
+    String _category = _selectedCategory!.split(', ')[0].substring(1);
+    String _color =
+        _selectedCategory!.split(', ')[1].split('(')[1].split(')')[0];
+    int _colorInt = int.parse(_color);
     db.expenses.add([
       _amount,
       _currentRecurrence,
       _selectedDate,
       _enteredNote,
-      _selectedCategory
+      _category,
+      _colorInt,
     ]);
     await db.updateExpenseData();
+    debugPrint("$_category   ${_colorInt.toString()}  $_color");
     debugPrint(db.expenses.toString());
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<String> recurrenceOptions = [
       "None",
       "Daily",
@@ -190,7 +197,7 @@ class _AddExpenseState extends State<AddExpense>
                     trailing: DropdownButton<String>(
                       value: _selectedCategory,
                       items: db.categories.map((category) {
-                        String value = category[0];
+                        String value = category.toString();
                         Color color = category[1];
                         categoryColor = color;
                         return DropdownMenuItem<String>(
@@ -204,7 +211,7 @@ class _AddExpenseState extends State<AddExpense>
                                 decoration: BoxDecoration(
                                     color: color, shape: BoxShape.circle),
                               ),
-                              Text(value),
+                              Text(value.split(', ')[0].substring(1)),
                             ],
                           ),
                         );

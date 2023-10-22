@@ -77,6 +77,7 @@ class _ExpensesState extends State<Expenses> {
                   date: db.expenses[index][2],
                   note: db.expenses[index][3],
                   category: db.expenses[index][4],
+                  color: db.expenses[index][5],
                 );
               },
             ),
