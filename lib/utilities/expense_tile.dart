@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class ExpenseDisplay extends StatelessWidget {
-  final int amount;
+  final num amount;
   final String occurence;
   final DateTime date;
   final String note;
