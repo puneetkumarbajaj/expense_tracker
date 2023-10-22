@@ -11,15 +11,17 @@ class ExpenseTrackerDataBase {
 
   void createInitialData() {
     categories = [
-      Category(name: "Bills", color: Color.fromARGB(255, 255, 191, 0)),
-      Category(name: "Take Out",color: Color.fromARGB(255, 0, 0, 255)),
-      Category(name: "Rent", color: Color.fromARGB(255, 0, 255, 0)),
-      Category(name: "Groceries", color: Color.fromARGB(255, 255, 155, 15))
+      Category(name: "Bills", color: Color(0xFFFFBF00)),
+      Category(name: "Take Out",color: Color(0xFF0000FF)),
+      Category(name: "Rent", color: Color(0xFF00FF00)),
+      Category(name: "Groceries", color: Color(0xFFFF9B0F))
     ];
     expenses = [
-      [12.5, "weekly", DateTime(2023, 10, 20), "Note", categories[1].name, categories[1].color],
-      [13.0, "none", DateTime(2023, 10, 19), "Note", categories[0].name, categories[0].color],
+      [12.5, "weekly", DateTime(2023, 10, 20), "Note", "Groceries", Color(0xFFFF9B0F)],
+      [13.0, "none", DateTime(2023, 10, 19), "Note", "Groceries", Color(0xFFFF9B0F)],
     ];
+    dataBox.put("CATEGORIES", categories);
+    dataBox.put("EXPENSES", expenses);
   }
 
   void loadData() async {

@@ -1,12 +1,19 @@
+import 'package:expense_app/data/database.dart';
 import 'package:expense_app/pages/categories.dart';
 import 'package:expense_app/types/widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class Settings extends WidgetWithTitle {
-  const Settings({super.key}) : super(title: "Settings");
+  Settings({super.key}) : super(title: "Settings");
 
-  void handleEraseData() {}
+  final _myBox = Hive.box('expenseTrackerBox');
+  ExpenseTrackerDataBase db = ExpenseTrackerDataBase();
+
+  Future<void> handleEraseData() async {
+    await _myBox.clear();
+  }
 
   @override
   Widget build(BuildContext context) {

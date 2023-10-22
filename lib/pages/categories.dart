@@ -86,6 +86,7 @@ class _CategoriesState extends State<Categories> {
       body: ListView.builder(
         itemCount: db.categories.length,
         itemBuilder: (context, index) {
+          debugPrint(db.categories[index].color.toString());
           return CategoryTile(
             categoryName: db.categories[index].name,
             categoryColor: db.categories[index].color,

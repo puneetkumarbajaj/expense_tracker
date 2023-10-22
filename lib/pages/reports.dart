@@ -242,7 +242,7 @@ List<BarChartGroupData> generateBarGroups() {
                         sectionsSpace: 1,
                         centerSpaceRadius: 0,
                         sections:
-                            showingSections(), // Make sure showingSections() is updated to use Category class
+                            showingSections(), 
                       ),
                     ),
                   ),

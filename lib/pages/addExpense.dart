@@ -150,9 +150,9 @@ class _AddExpenseState extends State<AddExpense>
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate:
-                              DateTime(2022), // Modify as per your requirement
+                              DateTime(2022),
                           lastDate:
-                              DateTime(2024), // Modify as per your requirement
+                              DateTime(2024), 
                         );
                         if (pickedDate != null && pickedDate != _selectedDate) {
                           setState(() {
@@ -172,7 +172,7 @@ class _AddExpenseState extends State<AddExpense>
                     title: const Text("Note"),
                     trailing: Container(
                       margin: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                      width: 150, // adjust as per your needs
+                      width: 150, 
                       child: TextField(
                         controller: _noteController,
                         onChanged: (value) {
