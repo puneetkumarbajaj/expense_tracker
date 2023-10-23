@@ -53,7 +53,7 @@ class Settings extends WidgetWithTitle {
                         child: const Text('Cancel' , style: TextStyle(color: Colors.blue),),
                       ),
                       TextButton(
-                        onPressed: () {handleEraseData; Navigator.of(context).pop();},
+                        onPressed: () {handleEraseData(); Navigator.of(context).pop();},
                         child: const Text('Erase Data', style: TextStyle(color: Colors.red),),
                       )
                     ],
